@@ -1,0 +1,31 @@
+name: Run Survey Bot via API
+
+on:
+  repository_dispatch:
+    types: [run-survey] # tên event
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run bot for environment
+        run: |
+          echo "Environment: ${{ github.event.client_payload.env }}"
+          echo "Answer: ${{ github.event.client_payload.answer }}"
+
+          if [ "${{ github.event.client_payload.env }}" = "dev" ]; then
+            node survey.js "${{ github.event.client_payload.answer }}" dev
+          elif [ "${{ github.event.client_payload.env }}" = "prod" ]; then
+            node survey.js "${{ github.event.client_payload.answer }}" prod
+          else
+            echo "Invalid environment"
+            exit 1
+          fi
