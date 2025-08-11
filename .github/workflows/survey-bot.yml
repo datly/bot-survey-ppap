@@ -15,8 +15,8 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           ref: main
 
-      - name: Env setup
-        run: mv .github/env/.env.dev .env
+      # - name: Env setup
+      #   run: mv .github/env/.env.dev .env
 
       - name: Setup Node
         uses: actions/setup-node@v4
