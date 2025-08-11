@@ -13,6 +13,7 @@ jobs:
         with:
           repository: datly/bot-survey
           token: ${{ secrets.GH_PAT }}
+          ref: main
 
       - name: Env setup
         run: mv .github/env/.env.dev .env
