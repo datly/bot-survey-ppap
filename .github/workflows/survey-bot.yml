@@ -2,7 +2,7 @@ name: Run Survey Bot via API
 
 on:
   repository_dispatch:
-    types: [run-survey-${{ github.event.client_payload.trackingId }}] # tên event, thêm trackingId
+    types: [run-survey]
 
 jobs:
   run-bot:
