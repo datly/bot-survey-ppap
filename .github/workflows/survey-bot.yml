@@ -8,13 +8,31 @@ jobs:
   run-bot:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           repository: datly/bot-survey
           token: ${{ secrets.GH_PAT }}
 
-      - name: Install dependencies
+      - name: Env setup
+        run: mv .github/env/.env.dev .env
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          token: ${{ secrets.GH_PAT }}
+          cache: 'npm'
+
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: cache-node-modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Run npm install
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm install
 
       - name: Run bot for environment
@@ -22,11 +40,4 @@ jobs:
           echo "Environment: ${{ github.event.client_payload.env }}"
           echo "Answer: ${{ github.event.client_payload.answer }}"
 
-          if [ "${{ github.event.client_payload.env }}" = "dev" ]; then
-            node survey.js "${{ github.event.client_payload.answer }}" dev
-          elif [ "${{ github.event.client_payload.env }}" = "prod" ]; then
-            node survey.js "${{ github.event.client_payload.answer }}" prod
-          else
-            echo "Invalid environment"
-            exit 1
-          fi
+          node survey.js "${{ github.event.client_payload.answer }}" dev
