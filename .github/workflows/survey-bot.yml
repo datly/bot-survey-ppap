@@ -41,4 +41,4 @@ jobs:
           echo "Environment: ${{ github.event.client_payload.env }}"
           echo "Answer: ${{ github.event.client_payload.answer }}"
 
-          node survey-cub.js "${{ github.event.client_payload.answer }}" dev
+          node survey-cub.js "${{ github.event.client_payload.trackingId }}"
