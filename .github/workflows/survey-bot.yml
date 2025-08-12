@@ -38,5 +38,5 @@ jobs:
 
       - name: Run bot
         run: |
-          echo "TrackingId: ${{ github.event.client_payload.trackingId }}"
-          node survey-cub.js "${{ github.event.client_payload.trackingId }}"
+          echo "Phone: ${{ github.event.client_payload.phone }}"
+          node survey-cub.js "${{ github.event.client_payload.phone }}"
